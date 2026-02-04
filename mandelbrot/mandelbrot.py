@@ -59,6 +59,7 @@ def mandelbrot(escala=1.0, max_iter=100, xmin=-2, xmax=1, ymin=-1.5, ymax=1.5, c
     imatge = Image.new('RGB', (amplada, alcada))
 
     for x in range(amplada):
+        print(f'{(x)/amplada*100:.2f}% completat', end='\r')
         for y in range(alcada):
             # Convertim píxel a nombre complex
             a = xmin + (x / amplada) * (xmax - xmin)
@@ -74,27 +75,27 @@ def mandelbrot(escala=1.0, max_iter=100, xmin=-2, xmax=1, ymin=-1.5, ymax=1.5, c
             # Assignar color segons iteracions
             color = color_func(n, max_iter)
             imatge.putpixel((x, y), color)
+    print('100.00% completat')
     
     return imatge
 
 
+if __name__ == '__main__':
+    # Paràmetres
+    # max_iter = 100
+    # escala = 1.0
+    max_iter = int(input("Màxim d'iteracions: ") or 100)
+    escala = float(input("Escala (1 per defecte): ").replace(',', '.') or 1)
 
-# Paràmetres
-# max_iter = 100
-# escala = 1.0
-max_iter = int(input("Màxim d'iteracions: ") or 100)
-escala = float(input("Escala (1 per defecte): ").replace(',', '.') or 1)
-
-# Rang del pla complex
-# xmin, xmax = -2, 1
-# ymin, ymax = -1.5, 1.5
-xmin = float(input("xmin (per defecte -2): ").replace(',', '.') or -2)
-xmax = float(input("xmax (per defecte 1): ").replace(',', '.') or 1)
-ymin = float(input("ymin (per defecte -1.5): ").replace(',', '.') or -1.5)
-ymax = float(input("ymax (per defecte 1.5): ").replace(',', '.') or 1.5)
+    # Rang del pla complex
+    # xmin, xmax = -2, 1
+    # ymin, ymax = -1.5, 1.5
+    xmin = float(input("xmin (per defecte -2): ").replace(',', '.') or -2)
+    xmax = float(input("xmax (per defecte 1): ").replace(',', '.') or 1)
+    ymin = float(input("ymin (per defecte -1.5): ").replace(',', '.') or -1.5)
+    ymax = float(input("ymax (per defecte 1.5): ").replace(',', '.') or 1.5)
 
 
-
-img = mandelbrot(escala, max_iter, xmin, xmax, ymin, ymax, calcula_color)
-img.save(f'mandelbrot_x{escala}_{max_iter}iter_{xmin}-{xmax}_{ymin}-{ymax}.png')
-img.show()
+    img = mandelbrot(escala, max_iter, xmin, xmax, ymin, ymax, calcula_color)
+    img.save(f'mandelbrot_x{escala}_{max_iter}iter_{xmin}-{xmax}_{ymin}-{ymax}.png')
+    img.show()
