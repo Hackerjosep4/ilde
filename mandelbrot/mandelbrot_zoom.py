@@ -15,6 +15,7 @@ while True:
         break
     sx = float(input("Coordenada x de la cuadricula: "))-1
     sy = float(input("Coordenada y de la cuadricula: "))-1
-    dst = dst / cc
+    tm = float(input("Cantitat de cuadrats de la cuadricala agafats: "))
+    dst = dst / cc * tm
     inx = inx + sx * dst
     iny = iny + sy * dst
