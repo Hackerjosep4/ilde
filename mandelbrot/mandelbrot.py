@@ -1,6 +1,33 @@
 from PIL import Image
 import colorsys
 
+
+
+
+
+import ctypes
+import os
+
+# Carregar la DLL (assegura't que està al mateix directori)
+dll_path = os.path.join(os.path.dirname(__file__), "mandelbrot.dll")
+lib = ctypes.CDLL(dll_path)
+
+# Definir tipus d'arguments i retorn
+lib.mandelbrot_iter.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_int]
+lib.mandelbrot_iter.restype = ctypes.c_int
+
+def mandelbrot_iter(a, b, max_iter=100):
+    return lib.mandelbrot_iter(a, b, max_iter)
+
+
+
+
+
+
+
+
+
+
 def calcula_color(n, max_iter):
     """
     Degradat: Blanc → Arc de Sant Martí → Negre
@@ -64,13 +91,15 @@ def mandelbrot(escala=1.0, max_iter=100, xmin=-2, xmax=1, ymin=-1.5, ymax=1.5, c
             # Convertim píxel a nombre complex
             a = xmin + (x / amplada) * (xmax - xmin)
             b = ymax - (y / alcada) * (ymax - ymin)
-            c = complex(a, b)
+            # c = complex(a, b)
 
-            z = 0
-            n = 0
-            while abs(z) <= 2 and n < max_iter:
-                z = z*z + c
-                n += 1
+            # z = 0
+            # n = 0
+            # while abs(z) <= 2 and n < max_iter:
+            #     z = z*z + c
+            #     n += 1
+
+            n = mandelbrot_iter(a, b, max_iter)
 
             # Assignar color segons iteracions
             color = color_func(n, max_iter)

@@ -56,48 +56,49 @@ def actualizarOverlay(root, img, cc, sx, sy, tm):
     mostrar_imagen(root, "temp.png")
 
 
+if __name__ == '__main__':
 
-root = tk.Tk()
+    root = tk.Tk()
 
-dst = 3
-inx = -2
-iny = -1.5
+    dst = 3
+    inx = -2
+    iny = -1.5
 
-cc = 1
-sx = 1
-sy = 1
-tm = 1
+    cc = 1
+    sx = 1
+    sy = 1
+    tm = 1
 
-img = None
+    img = None
 
-menu = "r"
+    menu = "r"
 
 
-while menu != "s":
-    if menu == "c":
-        cc = int(input("Tamany de costat de la quadricula: ") or 1)
-        actualizarOverlay(root, img, cc, sx, sy, tm)
-    elif menu == "x":
-        sx = float(input("Coordenada x de la quadricula: ") or 1)
-        actualizarOverlay(root, img, cc, sx, sy, tm)
-    elif menu == "y":
-        sy = float(input("Coordenada y de la quadricula: ") or 1)
-        actualizarOverlay(root, img, cc, sx, sy, tm)
-    elif menu == "t":
-        tm = float(input("Cantitat de cuadrats de la cuadricala agafats: ") or 1)
-        actualizarOverlay(root, img, cc, sx, sy, tm)
-    elif menu == "r":
-        tc = dst / cc
-        inx = inx + ((sx-1) * tc)
-        iny = iny + ((sy-1) * tc)
-        dst = tc * tm
-        img, ruta = generarImagen(inx, iny, dst)
-        mostrar_imagen(root, ruta)
-        cc = 1
-        sx = 1
-        sy = 1
-        tm = 1
-    menu = input(f"\n\nDades:\nCuadricula: {cc}\nX: {sx}\nY: {sy}\nTamany: {tm}\nMenu:\nC - Cuadricula\nX - Set x\nY - Set y\nT - Set tamany\nR - Renderitzar\nAccio: ").lower()
+    while menu != "s":
+        if menu == "c":
+            cc = int(input("Tamany de costat de la quadricula: ") or 1)
+            actualizarOverlay(root, img, cc, sx, sy, tm)
+        elif menu == "x":
+            sx = float(input("Coordenada x de la quadricula: ") or 1)
+            actualizarOverlay(root, img, cc, sx, sy, tm)
+        elif menu == "y":
+            sy = float(input("Coordenada y de la quadricula: ") or 1)
+            actualizarOverlay(root, img, cc, sx, sy, tm)
+        elif menu == "t":
+            tm = float(input("Cantitat de cuadrats de la cuadricala agafats: ") or 1)
+            actualizarOverlay(root, img, cc, sx, sy, tm)
+        elif menu == "r":
+            tc = dst / cc
+            inx = inx + ((sx-1) * tc)
+            iny = iny + ((sy-1) * tc)
+            dst = tc * tm
+            img, ruta = generarImagen(inx, iny, dst)
+            mostrar_imagen(root, ruta)
+            cc = 1
+            sx = 1
+            sy = 1
+            tm = 1
+        menu = input(f"\n\nDades:\nCuadricula: {cc}\nX: {sx}\nY: {sy}\nTamany: {tm}\nMenu:\nC - Cuadricula\nX - Set x\nY - Set y\nT - Set tamany\nR - Renderitzar\nAccio: ").lower()
 
 if os.path.exists("temp.png"):
     os.remove("temp.png")
