@@ -26,7 +26,7 @@ def validar_imagen(ruta):
         return False
 
 def generarImagen(inx, iny, dst):
-    ruta = f"mdbt_zoom_{inx:.3f}_{iny:.3f}_{dst:.3f}.png"
+    ruta = f"mdbt_zoom_{inx}_{iny}_{dst}.png"
     if validar_imagen(ruta):
         return Image.open(ruta), ruta
     else:
