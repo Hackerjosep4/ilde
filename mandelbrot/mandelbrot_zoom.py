@@ -1,6 +1,8 @@
 from PIL import Image, ImageDraw, ImageTk
 import tkinter as tk
+from tkinter import filedialog
 import os
+import re
 from mandelbrot import mandelbrot
 
 
@@ -55,6 +57,21 @@ def actualizarOverlay(root, img, cc, sx, sy, tm):
     imgc.save("temp.png")
     mostrar_imagen(root, "temp.png")
 
+def loadImagen():
+    while True:
+        ruta = filedialog.askopenfilename( title="Selecciona un arxiu PNG", filetypes=[("Imatges PNG", "*.png")] )
+        if ruta and validar_imagen(ruta):
+            nom = os.path.basename(ruta)
+            patron = r"^mdbt_zoom_([-+]?\d*\.?\d+)_([-+]?\d*\.?\d+)_([-+]?\d*\.?\d+)\.png$"
+            m = re.match(patron, nom)
+            if not m:
+                continue
+            inx, iny, dst = map(float, m.groups())
+            img = Image.open(ruta)
+            img.save(nom)
+            return img, nom, inx, iny, dst
+                
+
 
 if __name__ == '__main__':
 
@@ -98,7 +115,14 @@ if __name__ == '__main__':
             sx = 1
             sy = 1
             tm = 1
-        menu = input(f"\n\nDades:\nCuadricula: {cc}\nX: {sx}\nY: {sy}\nTamany: {tm}\nMenu:\nC - Cuadricula\nX - Set x\nY - Set y\nT - Set tamany\nR - Renderitzar\nAccio: ").lower()
+        elif menu == "o":
+            img, ruta, inx, iny, dst = loadImagen()
+            mostrar_imagen(root, ruta)
+            cc = 1
+            sx = 1
+            sy = 1
+            tm = 1
+        menu = input(f"\n\nDades:\nCuadricula: {cc}\nX: {sx}\nY: {sy}\nTamany: {tm}\nMenu:\nC - Cuadricula\nX - Set x\nY - Set y\nT - Set tamany\nR - Renderitzar\nO - Obrir imatge\nAccio: ").lower()
 
 if os.path.exists("temp.png"):
     os.remove("temp.png")
