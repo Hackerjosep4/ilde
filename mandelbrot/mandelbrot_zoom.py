@@ -92,17 +92,53 @@ if __name__ == '__main__':
 
 
     while menu != "s":
-        if menu == "c":
-            cc = int(input("Tamany de costat de la quadricula: ") or 1)
+        if len(menu) > 1 and menu[0] == "c":
+            if menu[1:] == "+":
+                cc += 1
+            elif menu[1:] == "-":
+                if cc > 1:
+                    cc -= 1
+            else:
+                try:
+                    cc = int(menu[1:])
+                except:
+                    pass
             actualizarOverlay(root, img, cc, sx, sy, tm)
-        elif menu == "x":
-            sx = float(input("Coordenada x de la quadricula: ") or 1)
+        elif len(menu) > 1 and  menu[0] == "x":
+            if menu[1:] == "+":
+                sx += 1
+            elif menu[1:] == "-":
+                if sx > 1:
+                    sx -= 1
+            else:
+                try:
+                    sx = float(menu[1:])
+                except:
+                    pass
             actualizarOverlay(root, img, cc, sx, sy, tm)
-        elif menu == "y":
-            sy = float(input("Coordenada y de la quadricula: ") or 1)
+        elif len(menu) > 1 and  menu[0] == "y":
+            if menu[1:] == "+":
+                sy += 1
+            elif menu[1:] == "-":
+                if sy > 1:
+                    sy -= 1
+            else:
+                try:
+                    sy = float(menu[1:])
+                except:
+                    pass
             actualizarOverlay(root, img, cc, sx, sy, tm)
-        elif menu == "t":
-            tm = float(input("Cantitat de cuadrats de la cuadricala agafats: ") or 1)
+        elif len(menu) > 1 and  menu[0] == "t":
+            if menu[1:] == "+":
+                tm += 1
+            elif menu[1:] == "-":
+                if tm > 1:
+                    tm -= 1
+            else:
+                try:
+                    tm = float(menu[1:])
+                except:
+                    pass
             actualizarOverlay(root, img, cc, sx, sy, tm)
         elif menu == "r":
             tc = dst / cc
@@ -122,7 +158,7 @@ if __name__ == '__main__':
             sx = 1
             sy = 1
             tm = 1
-        menu = input(f"\n\nDades:\nCuadricula: {cc}\nX: {sx}\nY: {sy}\nTamany: {tm}\nMenu:\nC - Cuadricula\nX - Set x\nY - Set y\nT - Set tamany\nR - Renderitzar\nO - Obrir imatge\nAccio: ").lower()
+        menu = input(f"\n\nDades:\n\nCuadricula: {cc}\nX: {sx}\nY: {sy}\nTamany: {tm}\n\nMenu:\n\nC<n/+/-> - Cuadricula\nX<n/+/-> - Set x\nY<n/+/-> - Set y\nT<n/+/-> - Set tamany\nR - Renderitzar\nO - Obrir imatge\n\nAccio: ").lower().strip()
 
 if os.path.exists("temp.png"):
     os.remove("temp.png")
