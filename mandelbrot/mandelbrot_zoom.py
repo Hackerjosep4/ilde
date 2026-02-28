@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw, ImageTk
 import tkinter as tk
 from tkinter import filedialog
+import math
 import os
 import re
 from mandelbrot import mandelbrot
@@ -12,7 +13,6 @@ def mostrar_imagen(root, ruta):
     imgtk = ImageTk.PhotoImage(Image.open(ruta))
     root.img_ref = imgtk
     tk.Label(root, image=imgtk).pack()
-    # tk.Label(root, image=ImageTk.PhotoImage(Image.open(ruta))).pack()
 
 def validar_imagen(ruta):
     # Comprobar si el archivo existe
@@ -27,14 +27,38 @@ def validar_imagen(ruta):
         # Si no se puede abrir como imagen, también es inválida
         return False
 
+def coords_a_xyn(inx, iny, dst):
+    n = math.ceil(math.log2(4 / dst))
+    cell = 4 / (2 ** n)
+    x = math.floor((inx + 2) / cell)
+    y = math.floor((iny + 2) / cell)
+    return x, y, n
+
 def generarImagen(inx, iny, dst):
-    ruta = f"mdbt_zoom_{inx}_{iny}_{dst}.png"
-    if validar_imagen(ruta):
-        return Image.open(ruta), ruta
-    else:
-        img = mandelbrot(0.5, 100, inx, inx+dst, iny, iny+dst)
-        img.save(ruta)
-        return img, ruta
+    x, y, n = coords_a_xyn(inx, iny, dst)
+    cell = 4 / (2 ** n)
+    imgs = [[],[]]
+    imgb = Image.new("RGB", (1000, 1000))
+    for i in range(2):
+        for j in range(2):
+            ruta = f"mbz_{n}_{x+j}_{y+i}.png"
+            if validar_imagen(ruta):
+                imgs[i].append(Image.open(ruta))
+            else:
+                img = mandelbrot(0.5, 100, ((x+j)*cell) - 2, ((x+j+1)*cell) - 2, ((y+i)*cell) - 2, ((y+i+1)*cell) - 2)
+                img.save(ruta)
+                imgs[i].append(img)
+            imgb.paste(imgs[i][j], (j*500, (1-i)*500))
+
+    origen_x = x * cell - 2
+    origen_y = y * cell - 2
+    escala = 1000 / (2 * cell)  # px por unidad
+
+    size = int(dst * escala)
+    px0 = int((inx - origen_x) * escala)
+    py0 = int((iny - origen_y) * escala)
+
+    return imgb.crop((px0, py0, px0 + size, py0 + size)).resize((500, 500))
 
 def generarOverlay(cc, sx, sy, tm):
     imgc = Image.new("RGBA", (500,500), (0,0,0,0))
@@ -145,8 +169,9 @@ if __name__ == '__main__':
             inx = inx + ((sx-1) * tc)
             iny = iny + ((sy-1) * tc)
             dst = tc * tm
-            img, ruta = generarImagen(inx, iny, dst)
-            mostrar_imagen(root, ruta)
+            img = generarImagen(inx, iny, dst)
+            img.save(f"temp.png")
+            mostrar_imagen(root, "temp.png")
             cc = 1
             sx = 1
             sy = 1
