@@ -1,8 +1,8 @@
 // mandelbrot.cpp
 #include <complex>
 #include <cstdint>
+#include <vector>
 
-extern "C" __declspec(dllexport)
 int mandelbrot_iter(double a, double b, int max_iter)
 {
     std::complex<double> c(a, b);
@@ -14,4 +14,26 @@ int mandelbrot_iter(double a, double b, int max_iter)
         n++;
     }
     return n;
+}
+
+extern "C" __declspec(dllexport)
+int* mandelbrot_grid(int amplada, int alcada, int max_iter, double x_min, double x_max, double y_min, double y_max)
+{
+    int* grid = new int[alcada * amplada];
+    double x_step = (x_max - x_min) / amplada;
+    double y_step = (y_max - y_min) / alcada;
+
+    for (int i = 0; i < alcada; i++) {
+        for (int j = 0; j < amplada; j++) {
+            double a = x_min + j * x_step;
+            double b = y_max - i * y_step;
+            grid[i * amplada + j] = mandelbrot_iter(a, b, max_iter);
+        }
+    }
+    return grid;
+}
+
+extern "C" __declspec(dllexport)
+void free_grid(int* grid) {
+    delete[] grid;
 }

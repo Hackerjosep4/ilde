@@ -1,10 +1,5 @@
 from PIL import Image
 import colorsys
-
-
-
-
-
 import ctypes
 import os
 
@@ -13,14 +8,15 @@ dll_path = os.path.join(os.path.dirname(__file__), "mandelbrot.dll")
 lib = ctypes.CDLL(dll_path)
 
 # Definir tipus d'arguments i retorn
-lib.mandelbrot_iter.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_int]
-lib.mandelbrot_iter.restype = ctypes.c_int
+lib.mandelbrot_grid.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double]
+lib.mandelbrot_grid.restype = ctypes.POINTER(ctypes.c_int)
+lib.free_grid.argtypes = [ctypes.POINTER(ctypes.c_int)]
 
-def mandelbrot_iter(a, b, max_iter=100):
-    return lib.mandelbrot_iter(a, b, max_iter)
+def mandelbrot_grid(amplada, alcada, max_iter, xmin, xmax, ymin, ymax):
+    return lib.mandelbrot_grid(amplada, alcada, max_iter, xmin, xmax, ymin, ymax)
 
-
-
+def free_grid(grid):
+    lib.free_grid(grid)
 
 
 
@@ -85,27 +81,15 @@ def mandelbrot(escala=1.0, max_iter=100, xmin=-2, xmax=1, ymin=-1.5, ymax=1.5, c
 
     imatge = Image.new('RGB', (amplada, alcada))
 
-    for x in range(amplada):
-        print(f'{(x)/amplada*100:.2f}% completat', end='\r')
-        for y in range(alcada):
-            # Convertim píxel a nombre complex
-            a = xmin + (x / amplada) * (xmax - xmin)
-            b = ymax - (y / alcada) * (ymax - ymin)
-            # c = complex(a, b)
+    grid = mandelbrot_grid(amplada, alcada, max_iter, xmin, xmax, ymin, ymax)
 
-            # z = 0
-            # n = 0
-            # while abs(z) <= 2 and n < max_iter:
-            #     z = z*z + c
-            #     n += 1
-
-            n = mandelbrot_iter(a, b, max_iter)
-
+    for i in range(amplada):
+        for j in range(alcada):
             # Assignar color segons iteracions
-            color = color_func(n, max_iter)
-            imatge.putpixel((x, y), color)
-    print('100.00% completat')
+            color = color_func(grid[i*alcada+j], max_iter)
+            imatge.putpixel((i, j), color)
     
+    free_grid(grid)
     return imatge
 
 
