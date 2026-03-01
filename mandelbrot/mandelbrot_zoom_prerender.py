@@ -1,4 +1,4 @@
-from mandelbrot_zoom import generarImagen
+from mandelbrot_zoom import generarImagenSector
 import colorsys
 from PIL import Image
 
@@ -80,35 +80,24 @@ def es_inutil_iters(ruta, max_iter=100, umbral=0.90):
         return True
     return False
 
-def preRender(cc, tms, reps):
-    recursivePreRender(cc, tms, reps, -2, -1.5, 3)
-
-def recursivePreRender(cc, tms, reps, inx, iny, dst):
+def recursivePreRender(reps):
     if reps == 0:
         return
     
-    lim = 1
-    if not tms:
-        lim =  cc-1
+    cc = 2**reps
+
+    for x in range(cc):
+        for y in range(cc):
+            _, ruta = generarImagenSector(x, y, reps)
+            if es_inutil_iters(ruta):
+                continue
     
-    for tm in range(lim):
-        for x in range(cc-tm):
-            for y in range(cc-tm):
-                tc = dst / cc
-                tinx = inx + (x * tc)
-                tiny = iny + (y * tc)
-                tdst = tc * (tm + 1)
-                _, ruta = generarImagen(tinx, tiny, tdst)
-                if es_inutil_iters(ruta):
-                    continue
-                recursivePreRender(cc, tms, reps-1, tinx, tiny, tdst)
+    recursivePreRender(reps-1)
 
 
 
 
 
 if __name__ == '__main__':
-    cc = int(input("Tamany del costat de la cuadricula: "))
-    tms = not bool(input("Provar tots els tamanys posibles? (True/False): "))
     reps = int(input("Nombre de capes renderitzades: "))
-    preRender(cc, tms, reps)
+    recursivePreRender(reps)
