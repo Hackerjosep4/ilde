@@ -85,12 +85,14 @@ def recursivePreRender(reps):
         return
     
     cc = 2**reps
+    co = 0
+    com = cc**2
 
     for x in range(cc):
         for y in range(cc):
-            _, ruta = generarImagenSector(x, y, reps)
-            if es_inutil_iters(ruta):
-                continue
+            generarImagenSector(x, y, reps)
+            co += 1
+            print(f"Pre-rendering lvl {reps}: {co}/{com}")
     
     recursivePreRender(reps-1)
 
