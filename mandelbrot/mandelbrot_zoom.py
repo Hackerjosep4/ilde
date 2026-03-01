@@ -181,14 +181,7 @@ if __name__ == '__main__':
             sx = 1
             sy = 1
             tm = 1
-        elif menu == "o":
-            img, ruta, inx, iny, dst = loadImagen()
-            mostrar_imagen(root, ruta)
-            cc = 1
-            sx = 1
-            sy = 1
-            tm = 1
-        menu = input(f"\n\nDades:\n\nCuadricula: {cc}\nX: {sx}\nY: {sy}\nTamany: {tm}\n\nMenu:\n\nC<n/+/-> - Cuadricula\nX<n/+/-> - Set x\nY<n/+/-> - Set y\nT<n/+/-> - Set tamany\nR - Renderitzar\nO - Obrir imatge\n\nAccio: ").lower().strip()
+        menu = input(f"\n\nDades:\n\nCuadricula: {cc}\nX: {sx}\nY: {sy}\nTamany: {tm}\n\nMenu:\n\nC<n/+/-> - Cuadricula\nX<n/+/-> - Set x\nY<n/+/-> - Set y\nT<n/+/-> - Set tamany\nR - Renderitzar\n\nAccio: ").lower().strip()
 
 if os.path.exists("temp.png"):
     os.remove("temp.png")
