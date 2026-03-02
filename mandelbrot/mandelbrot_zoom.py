@@ -52,12 +52,13 @@ def generarImagen(inx, iny, dst):
     size = int(dst * escala)
     px0 = int((inx - origen_x) * escala)
     py0 = int((iny - origen_y) * escala)
+    py0_img = 1000 - py0 - size
 
-    return imgb.crop((px0, py0, px0 + size, py0 + size)).resize((500, 500))
+    return imgb.crop((px0, py0_img, px0 + size, py0_img + size)).resize((500, 500))
 
 def generarImagenSector(x, y, n):
     cell = 4 / (2 ** n)
-    ruta = f"mbz_{n}_{x}_{y}.png"
+    ruta = f"img/mbz_{n}_{x}_{y}.png"
     if validar_imagen(ruta):
         return Image.open(ruta), ruta
     else:

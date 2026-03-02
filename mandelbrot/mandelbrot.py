@@ -2,16 +2,23 @@ from PIL import Image
 import colorsys
 import ctypes
 import os
-import numpy as np  
+import numpy as np
+import sys
+
+if sys.platform == "win32":
+    lib_name = "mandelbrot.dll"
+else:
+    lib_name = "mandelbrot.so"
 
 # Carregar la DLL (assegura't que està al mateix directori)
-dll_path = os.path.join(os.path.dirname(__file__), "mandelbrot.dll")
+dll_path = os.path.join(os.path.dirname(__file__), lib_name)
 lib = ctypes.CDLL(dll_path)
 
 # Definir tipus d'arguments i retorn
 lib.mandelbrot_grid.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double]
 lib.mandelbrot_grid.restype = ctypes.POINTER(ctypes.c_int)
 lib.free_grid.argtypes = [ctypes.POINTER(ctypes.c_int)]
+lib.free_grid.restype = None
 
 def mandelbrot_grid(amplada, alcada, max_iter, xmin, xmax, ymin, ymax):
     return lib.mandelbrot_grid(amplada, alcada, max_iter, xmin, xmax, ymin, ymax)
