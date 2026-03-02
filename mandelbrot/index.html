@@ -103,7 +103,7 @@
     const n = getN(view.dst);
 
     // Zoom in: n+1 i n+2
-    for (const nIn of [n + 1, n + 2]) {
+    for (const nIn of [n + 1]) {
       const cellIn = getCell(nIn);
       const tixMin = Math.floor((view.cx - view.dst / 2 + 2) / cellIn);
       const tixMax = Math.floor((view.cx + view.dst / 2 + 2) / cellIn);
@@ -168,13 +168,20 @@
   }
 
   // Prefetch en segon pla sense afectar l'indicador de càrrega
+  // Limitat a MAX_PREFETCH peticions per evitar inundar el servidor
+  const MAX_PREFETCH = 8;
   function schedulePrefetch() {
     clearTimeout(prefetchTimer);
     prefetchTimer = setTimeout(() => {
-      // Tiles al voltant (padding extra)
-      getTiles(PADDING).forEach(({ n, x, y }) => loadTile(n, x, y, false));
-      // Tiles dels nivells de zoom veïns
-      getPrefetchTiles().forEach(({ n, x, y }) => loadTile(n, x, y, false));
+      const toLoad = [
+        ...getTiles(PADDING),
+        ...getPrefetchTiles()
+      ].filter(({ n, x, y }) => {
+        const key = `${n}_${x}_${y}`;
+        return !tileCache[key];
+      }).slice(0, MAX_PREFETCH);
+
+      toLoad.forEach(({ n, x, y }) => loadTile(n, x, y, false));
     }, PREFETCH_DELAY);
   }
 
