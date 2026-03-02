@@ -122,7 +122,7 @@
           pendingTiles = Math.max(0, pendingTiles - 1);
           updateLoadingIndicator();
         };
-        img.src = `/img/mbz_${n}_${x}_${y}.png`;
+        img.src = `./img/mbz_${n}_${x}_${y}.png`;
       })
       .catch(() => {
         entry.status = 'error';

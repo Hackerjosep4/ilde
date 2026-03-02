@@ -6,9 +6,9 @@ import numpy as np
 import sys
 
 if sys.platform == "win32":
-    lib_name = "mandelbrot.dll"
+    lib_name = "mandelbrot_lib.dll"
 else:
-    lib_name = "mandelbrot.so"
+    lib_name = "mandelbrot_lib.so"
 
 # Carregar la DLL (assegura't que està al mateix directori)
 dll_path = os.path.join(os.path.dirname(__file__), lib_name)
