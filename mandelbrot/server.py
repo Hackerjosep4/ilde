@@ -16,6 +16,11 @@ def get_tile(n, x, y):
     except Exception as e:
         abort(500, description=str(e))
 
+@app.route('/check/<int:n>/<int:x>/<int:y>')
+def check_tile(n, x, y):
+    ruta = f"img/mbz_{n}_{x}_{y}.png"
+    return jsonify({"exists": os.path.isfile(ruta)})
+
 @app.route('/health')
 def health():
     return jsonify({"status": "ok"})
