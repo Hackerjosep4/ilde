@@ -45,6 +45,8 @@
   <label>LEVEL N</label>
   <input type="number" id="lvl-input" value="1" min="1" max="20">
   <button id="load-btn" onclick="loadLevel()">▶ Load</button>
+  <button onclick="location.href='./'">← Return</button>
+  <div id="file-count" style="font-size:0.7rem;color:var(--dim);">existing files: <span style="color:var(--accent2)">—</span></div>
   <div id="status">—</div>
 </div>
 <div class="canvas-wrap">
@@ -54,6 +56,11 @@
 <script>
   const API      = 'https://hackerblock.sytes.net/mbapi';
   const MAX_CONC = 16;
+
+  fetch('./count.php').then(r => r.text()).then(n => {
+    document.querySelector('#file-count span').textContent = n.trim();
+  }).catch(() => {});
+
 
   let currentN = null;
   let abortFlag = false;
