@@ -21,6 +21,18 @@ def check_tile(n, x, y):
     ruta = f"img/mbz_{n}_{x}_{y}.png"
     return jsonify({"exists": os.path.isfile(ruta)})
 
+@app.route('/level/<int:n>')
+def get_level(n):
+    tiles = []
+    for f in os.listdir("img"):
+        if not f.endswith(".png"):
+            continue
+        # Format fitxer: mbz_N_X_Y.png
+        parts = f[4:-4].split("_")  # treu "mbz_" i ".png" -> ["N","X","Y"]
+        if len(parts) == 3 and parts[0] == str(n):
+            tiles.append({"x": int(parts[1]), "y": int(parts[2])})
+    return jsonify({"n": n, "tiles": tiles})
+
 @app.route('/health')
 def health():
     return jsonify({"status": "ok"})
